@@ -1,0 +1,33 @@
+{{define "title"}}修改接口{{end}}
+{{define "head"}}{{end}}
+{{define "content"}}
+
+<div class="container">
+	<div class="page-header">
+		<h1>{{template "title" .}}</h1>
+	</div>
+
+	<form id="form" method="post">
+		<div class="form-group">
+			<label for="url">接口地址</label>
+			<div><input type="text" class="form-control" id="url" name="url" maxlength="512" placeholder="Url" value="{{.url}}" /></div>
+		</div>
+
+		<div class="form-group">
+			<label for="interval_time">间隔时长(分钟)</label><div>
+			<input type="text" class="form-control" id="interval_time" name="interval_time" maxlength="2" placeholder="5" value="{{.interval_time}}" />	</div>
+		</div>
+
+        <a title="保存" class="btn btn-success" role="submit" onclick="document.getElementById('form').submit();">
+			<span class="glyphicon glyphicon-ok" aria-hidden="true"></span> 保存
+		</a>
+		<a title="返回" class="btn btn-danger" role="button" href="{{$.BaseURI}}">
+			<span class="glyphicon glyphicon-menu-left" aria-hidden="true"></span> 返回
+		</a>
+	</form>
+
+	{{template "footer" .}}
+</div>
+
+{{end}}
+{{define "foot"}}{{end}}

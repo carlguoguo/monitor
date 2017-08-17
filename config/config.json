@@ -1,0 +1,51 @@
+{
+    "Database": {
+        "Username": "root",
+        "Password": "",
+        "Name": "gowebapp",
+        "Hostname": "127.0.0.1",
+        "Port": 3306,
+        "Parameter": "?parseTime=true"
+    },
+    "Recaptcha": {
+		"Enabled": false,
+		"Secret": "",
+		"SiteKey": ""
+	},
+    "View": {
+		"BaseURI": "/",
+		"Extension": "tmpl",
+		"Folder": "template",
+		"Name": "blank",
+		"Caching": true
+	},
+    "Session": {
+		"SecretKey": "@r4B?EThaSEh_drudR7P_hub=s#s2Pah",
+		"Name": "gosess",
+		"Options": {
+			"Path": "/",
+			"Domain": "",
+			"MaxAge": 28800,
+			"Secure": false,
+			"HttpOnly": true
+		}
+	},
+    "Email": {
+		"Username": "",
+		"Password": "",
+		"Hostname": "",
+		"Port": 25,
+		"From": ""
+	},
+    "Template": {
+		"Root": "base",
+		"Children": [
+			"partial/menu",
+			"partial/footer"
+		]
+	},
+    "Server": {
+		"Hostname": "",
+		"HTTPPort": 8080
+	}
+}
