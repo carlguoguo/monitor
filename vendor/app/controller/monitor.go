@@ -10,6 +10,7 @@ import (
 	"github.com/julienschmidt/httprouter"
 
 	"app/model"
+	"app/service"
 	"app/shared/session"
 	"app/shared/view"
 )
@@ -44,7 +45,7 @@ func APICreatePOST(w http.ResponseWriter, r *http.Request) {
 	userID := fmt.Sprintf("%s", sess.Values["id"])
 
 	// Get database result
-	creationErr := model.APICreate(url, intervalTime, userID)
+	newAPI, creationErr := model.APICreateAndGet(url, intervalTime, userID)
 
 	if creationErr != nil {
 		log.Println(creationErr)
@@ -53,6 +54,7 @@ func APICreatePOST(w http.ResponseWriter, r *http.Request) {
 	} else {
 		sess.AddFlash(view.Flash{Message: "新接口已经添加!", Class: view.FlashSuccess})
 		sess.Save(r, w)
+		service.StartMonitor(newAPI)
 		http.Redirect(w, r, "/", http.StatusFound)
 		return
 	}
@@ -115,7 +117,7 @@ func APIUpdatePost(w http.ResponseWriter, r *http.Request) {
 	apiID := params.ByName("id")
 
 	// Get database result
-	updateErr := model.APIUpdate(url, intervalTime, userID, apiID)
+	newAPI, updateErr := model.APIUpdateAndReturn(url, intervalTime, userID, apiID)
 	// Will only error if there is a problem with the query
 	if updateErr != nil {
 		log.Println(updateErr)
@@ -124,6 +126,7 @@ func APIUpdatePost(w http.ResponseWriter, r *http.Request) {
 	} else {
 		sess.AddFlash(view.Flash{Message: "接口修改成功!", Class: view.FlashSuccess})
 		sess.Save(r, w)
+		service.RestartMonitor(newAPI)
 		http.Redirect(w, r, "/", http.StatusFound)
 		return
 	}
@@ -141,7 +144,7 @@ func APIDeleteGet(w http.ResponseWriter, r *http.Request) {
 	noteID := params.ByName("id")
 
 	// Get database result
-	err := model.APIDelete(noteID)
+	deletedAPI, err := model.APIDeleteAndReturn(noteID)
 	// Will only error if there is a problem with the query
 	if err != nil {
 		log.Println(err)
@@ -149,6 +152,7 @@ func APIDeleteGet(w http.ResponseWriter, r *http.Request) {
 		sess.Save(r, w)
 	} else {
 		sess.AddFlash(view.Flash{Message: "接口删除成功!", Class: view.FlashSuccess})
+		service.StopMonitor(deletedAPI)
 		sess.Save(r, w)
 	}
 

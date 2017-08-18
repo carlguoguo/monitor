@@ -6,7 +6,9 @@ import (
 	"os"
 	"runtime"
 
+	"app/model"
 	"app/route"
+	"app/service"
 	"app/shared/database"
 	"app/shared/email"
 	"app/shared/jsonconfig"
@@ -46,6 +48,15 @@ func main() {
 		plugin.NoEscape(),
 		plugin.PrettyTime(),
 	)
+
+	// Start Interval Job
+	apis, err := model.APIs()
+	if err != nil {
+		log.Fatal(err)
+	}
+	for _, api := range apis {
+		service.StartMonitor(api)
+	}
 
 	// Start the listener
 	server.Run(route.LoadHTTP(), config.Server)
