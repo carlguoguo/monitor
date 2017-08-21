@@ -13,13 +13,17 @@ import (
 
 // API table contains the information for each api
 type API struct {
-	ID           uint32    `db:"id"`
-	URL          string    `db:"url"`
-	CreatedAt    time.Time `db:"created_at"`
-	UpdatedAt    time.Time `db:"updated_at"`
-	CreatedBy    uint32    `db:"user_id"`
-	IntervalTime uint8     `db:"interval_time"`
-	Job          interval.Job
+	ID             uint32    `db:"id"`
+	Alias          string    `db:"alias"`
+	URL            string    `db:"url"`
+	CreatedAt      time.Time `db:"created_at"`
+	UpdatedAt      time.Time `db:"updated_at"`
+	AlertReceivers string    `db:"alert_receivers"`
+	Timeout        uint8     `db:"timeout"`
+	FailMax        uint8     `db:"fail_max"`
+	CreatedBy      uint32    `db:"user_id"`
+	IntervalTime   uint8     `db:"interval_time"`
+	Job            interval.Job
 }
 
 // Request table contains the information for each request status for specific api
@@ -52,16 +56,16 @@ func APIByURL(url string) (API, error) {
 }
 
 // APICreate creates an api
-func APICreate(url string, intervalTime int, userID string) error {
-	_, err := database.SQL.Exec("INSERT INTO api (url, interval_time, user_id) VALUES (?,?,?)", url, intervalTime, userID)
+func APICreate(url string, intervalTime int, userID string, alias string, alertReceivers string, timeout int, failMax int) error {
+	_, err := database.SQL.Exec("INSERT INTO api (url, interval_time, user_id, alias, alert_receivers, timeout, fail_max) VALUES (?,?,?,?,?,?,?)", url, intervalTime, userID, alias, alertReceivers, timeout, failMax)
 	return standardizeError(err)
 
 }
 
 // APICreateAndGet creates an api and return API struct
-func APICreateAndGet(url string, intervalTime int, userID string) (API, error) {
+func APICreateAndGet(url string, intervalTime int, userID string, alias string, alertReceivers string, timeout int, failMax int) (API, error) {
 	var err error
-	creationErr := APICreate(url, intervalTime, userID)
+	creationErr := APICreate(url, intervalTime, userID, alias, alertReceivers, timeout, failMax)
 	if creationErr != nil {
 		err = creationErr
 	}
@@ -73,15 +77,15 @@ func APICreateAndGet(url string, intervalTime int, userID string) (API, error) {
 }
 
 // APIUpdate updates an api
-func APIUpdate(url string, intervalTime int, userID string, apiID string) error {
-	_, err := database.SQL.Exec("UPDATE api SET url=?, interval_time=?, user_id=? WHERE id=? LIMIT 1", url, intervalTime, userID, apiID)
+func APIUpdate(url string, intervalTime int, userID string, alias string, alertReceivers string, timeout int, failMax int, apiID string) error {
+	_, err := database.SQL.Exec("UPDATE api SET url=?, interval_time=?, user_id=?, alias=?, alert_receivers=?, timeout=?, fail_max=? WHERE id=? LIMIT 1", url, intervalTime, userID, alias, alertReceivers, timeout, failMax, apiID)
 	return standardizeError(err)
 }
 
 // APIUpdateAndReturn updates an api and return it
-func APIUpdateAndReturn(url string, intervalTime int, userID string, apiID string) (API, error) {
+func APIUpdateAndReturn(url string, intervalTime int, userID string, alias string, alertReceivers string, timeout int, failMax int, apiID string) (API, error) {
 	var err error
-	updateErr := APIUpdate(url, intervalTime, userID, apiID)
+	updateErr := APIUpdate(url, intervalTime, userID, alias, alertReceivers, timeout, failMax, apiID)
 	if updateErr != nil {
 		err = updateErr
 	}

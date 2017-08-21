@@ -12,7 +12,7 @@ var apiJobMap = make(map[uint32]interval.Job)
 
 // StartMonitor creates a job and start monitor
 func StartMonitor(api model.API) {
-	job := interval.NewJob(RequestGET(api), int(api.IntervalTime))
+	job := interval.NewJob(requestGET(api), int(api.IntervalTime))
 	apiJobMap[api.ID] = job
 	job.Start()
 }
@@ -30,12 +30,12 @@ func RestartMonitor(api model.API) {
 	StartMonitor(api)
 }
 
-// RequestGET request a url
-func RequestGET(api model.API) func() {
+func requestGET(api model.API) func() {
 	return func() {
 		resp, err := http.Get(api.URL)
 		if err != nil {
 			fmt.Println(err)
+			return
 		}
 		defer resp.Body.Close()
 		fmt.Printf("%s : %d\n", api.URL, resp.StatusCode)

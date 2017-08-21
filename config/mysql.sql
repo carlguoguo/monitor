@@ -11,13 +11,13 @@ SET CHARACTER SET utf8;
 /* *****************************************************************************
 // Remove old database
 // ****************************************************************************/
-DROP DATABASE IF EXISTS gowebapp;
+DROP DATABASE IF EXISTS monitor;
 
 /* *****************************************************************************
 // Create new database
 // ****************************************************************************/
-CREATE DATABASE gowebapp DEFAULT CHARSET = utf8 COLLATE = utf8_unicode_ci;
-USE gowebapp;
+CREATE DATABASE monitor DEFAULT CHARSET = utf8 COLLATE = utf8_unicode_ci;
+USE monitor;
 
 /* *****************************************************************************
 // Create the tables
@@ -50,25 +50,14 @@ INSERT INTO `user_status` (`id`, `status`, `created_at`, `updated_at`, `deleted`
 (1, 'active',   CURRENT_TIMESTAMP,  CURRENT_TIMESTAMP,  0),
 (2, 'inactive', CURRENT_TIMESTAMP,  CURRENT_TIMESTAMP,  0);
 
--- CREATE TABLE note (
---     id INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
---
---     content TEXT NOT NULL,
---
---     user_id INT(10) UNSIGNED NOT NULL,
---
---     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
---     updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
---     deleted TINYINT(1) UNSIGNED NOT NULL DEFAULT 0,
---
---     CONSTRAINT `f_note_user` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
---
---     PRIMARY KEY (id)
--- );
 
 CREATE TABLE api (
     id INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
-    url TEXT NOT NULL,
+    url CHAR(255) NOT NULL,
+    alias CHAR(50) NOT NULL,
+    alert_receivers VARCHAR(1000),
+    timeout INT(4) NOT NULL,
+    fail_max INT(3) NOT NULL,
     user_id INT(10) UNSIGNED NOT NULL,
     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,

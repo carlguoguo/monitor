@@ -72,15 +72,9 @@ func routes() *httprouter.Router {
 		ThenFunc(controller.RegisterPOST)))
 
 	// API
-	r.GET("/api/create", hr.Handler(alice.
-		New(acl.DisallowAnon).
-		ThenFunc(controller.APICreateGet)))
 	r.POST("/api/create", hr.Handler(alice.
 		New(acl.DisallowAnon).
 		ThenFunc(controller.APICreatePOST)))
-	r.GET("/api/update/:id", hr.Handler(alice.
-		New(acl.DisallowAnon).
-		ThenFunc(controller.APIUpdateGet)))
 	r.POST("/api/update/:id", hr.Handler(alice.
 		New(acl.DisallowAnon).
 		ThenFunc(controller.APIUpdatePost)))

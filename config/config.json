@@ -2,7 +2,7 @@
     "Database": {
         "Username": "root",
         "Password": "",
-        "Name": "gowebapp",
+        "Name": "monitor",
         "Hostname": "127.0.0.1",
         "Port": 3306,
         "Parameter": "?parseTime=true"
@@ -41,7 +41,8 @@
 		"Root": "base",
 		"Children": [
 			"partial/menu",
-			"partial/footer"
+			"partial/footer",
+            "partial/api"
 		]
 	},
     "Server": {
