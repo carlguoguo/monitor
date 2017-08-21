@@ -7,7 +7,8 @@
                 <tr>
                     <th>接口地址</th>
                     <th>间隔时间(分钟)</th>
-                    <th>操作</th>
+                    <th>开始/暂停</th>
+                    <th>管理</th>
                 </tr>
             </thead>
             <tbody>
@@ -16,12 +17,23 @@
                     <td class="text"><span>{{.URL}}</span></td>
                     <td>{{.IntervalTime}}</td>
                     <td>
+                        {{if eq 0 .Start}}
+                        <a class="btn btn-success" role="button" href="{{$.BaseURI}}monitor/start/{{.ID}}">
+    							<span class="glyphicon glyphicon-play" aria-hidden="true"></span> 开始监控
+    						</a>
+                        {{else}}
+                        <a class="btn btn-warning" role="button" href="{{$.BaseURI}}monitor/pause/{{.ID}}">
+    							<span class="glyphicon glyphicon-pause" aria-hidden="true"></span> 暂停监控
+    						</a>
+                        {{end}}
+                    </td>
+                    <td>
                         <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#updateAPI" data-id="{{.ID}}"
                             data-url="{{.URL}}" data-alias="{{.Alias}}" data-interval="{{.IntervalTime}}" data-alert="{{.AlertReceivers}}" data-timeout="{{.Timeout}}"
                             data-failMax="{{.FailMax}}">
 								<span class="glyphicon glyphicon-plus" aria-hidden="true"></span> 编辑
 							</button>
-                        <a title="Delete Note" class="btn btn-danger" role="button" href="{{$.BaseURI}}api/delete/{{.ID}}">
+                        <a class="btn btn-danger" role="button" href="{{$.BaseURI}}api/delete/{{.ID}}">
 								<span class="glyphicon glyphicon-trash" aria-hidden="true"></span> 删除
 							</a>
                     </td>

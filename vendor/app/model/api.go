@@ -23,6 +23,7 @@ type API struct {
 	FailMax        uint8     `db:"fail_max"`
 	CreatedBy      uint32    `db:"user_id"`
 	IntervalTime   uint8     `db:"interval_time"`
+	Start          uint8     `db:"start"`
 	Job            interval.Job
 }
 
@@ -37,21 +38,28 @@ type Request struct {
 // APIs return all api
 func APIs() ([]API, error) {
 	var result []API
-	err := database.SQL.Select(&result, "SELECT id, url, interval_time, user_id, alias, alert_receivers, timeout, fail_max, created_at, updated_at FROM api")
+	err := database.SQL.Select(&result, "SELECT id, start, url, interval_time, user_id, alias, alert_receivers, timeout, fail_max, created_at, updated_at FROM api")
+	return result, standardizeError(err)
+}
+
+// StartedAPIs return all started api
+func StartedAPIs() ([]API, error) {
+	var result []API
+	err := database.SQL.Select(&result, "SELECT id, start, url, interval_time, user_id, alias, alert_receivers, timeout, fail_max, created_at, updated_at FROM api where start = 1")
 	return result, standardizeError(err)
 }
 
 // APIByID gets api by ID
 func APIByID(apiID string) (API, error) {
 	result := API{}
-	err := database.SQL.Get(&result, "SELECT id, url, interval_time, user_id, alias, alert_receivers, timeout, fail_max, created_at, updated_at FROM api WHERE id = ? LIMIT 1", apiID)
+	err := database.SQL.Get(&result, "SELECT id, start, url, interval_time, user_id, alias, alert_receivers, timeout, fail_max, created_at, updated_at FROM api WHERE id = ? LIMIT 1", apiID)
 	return result, standardizeError(err)
 }
 
 // APIByURL gets api by ID
 func APIByURL(url string) (API, error) {
 	result := API{}
-	err := database.SQL.Get(&result, "SELECT id, url, interval_time, user_id, alias, alert_receivers, timeout, fail_max, created_at, updated_at FROM api WHERE url = ? LIMIT 1", url)
+	err := database.SQL.Get(&result, "SELECT id, start, url, interval_time, user_id, alias, alert_receivers, timeout, fail_max, created_at, updated_at FROM api WHERE url = ? LIMIT 1", url)
 	return result, standardizeError(err)
 }
 
@@ -78,7 +86,13 @@ func APICreateAndGet(url string, intervalTime int, userID string, alias string, 
 
 // APIUpdate updates an api
 func APIUpdate(url string, intervalTime int, userID string, alias string, alertReceivers string, timeout int, failMax int, apiID string) error {
-	_, err := database.SQL.Exec("UPDATE api SET url=?, interval_time=?, user_id=?, alias=?, alert_receivers=?, timeout=?, fail_max=? WHERE id=? LIMIT 1", url, intervalTime, userID, alias, alertReceivers, timeout, failMax, apiID)
+	_, err := database.SQL.Exec("UPDATE api SET url=?, start=0, interval_time=?, user_id=?, alias=?, alert_receivers=?, timeout=?, fail_max=? WHERE id=? LIMIT 1", url, intervalTime, userID, alias, alertReceivers, timeout, failMax, apiID)
+	return standardizeError(err)
+}
+
+// APIUpdateStart updates an api
+func APIUpdateStart(start int, apiID string) error {
+	_, err := database.SQL.Exec("UPDATE api SET start=? WHERE id=? LIMIT 1", start, apiID)
 	return standardizeError(err)
 }
 

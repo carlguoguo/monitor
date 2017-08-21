@@ -36,7 +36,7 @@ func APICreatePOST(w http.ResponseWriter, r *http.Request) {
 	} else {
 		sess.AddFlash(view.Flash{Message: "新接口已经添加!", Class: view.FlashSuccess})
 		sess.Save(r, w)
-		service.StartMonitor(newAPI)
+		service.NewMonitor(newAPI)
 		http.Redirect(w, r, "/", http.StatusFound)
 		return
 	}
@@ -74,7 +74,7 @@ func APIUpdatePost(w http.ResponseWriter, r *http.Request) {
 	} else {
 		sess.AddFlash(view.Flash{Message: "接口修改成功!", Class: view.FlashSuccess})
 		sess.Save(r, w)
-		service.RestartMonitor(newAPI)
+		service.PauseMonitor(newAPI)
 		http.Redirect(w, r, "/", http.StatusFound)
 		return
 	}
@@ -89,10 +89,10 @@ func APIDeleteGet(w http.ResponseWriter, r *http.Request) {
 	sess := session.Instance(r)
 	var params httprouter.Params
 	params = context.Get(r, "params").(httprouter.Params)
-	noteID := params.ByName("id")
+	apiID := params.ByName("id")
 
 	// Get database result
-	deletedAPI, err := model.APIDeleteAndReturn(noteID)
+	deletedAPI, err := model.APIDeleteAndReturn(apiID)
 	// Will only error if there is a problem with the query
 	if err != nil {
 		log.Println(err)
@@ -104,6 +104,58 @@ func APIDeleteGet(w http.ResponseWriter, r *http.Request) {
 		sess.Save(r, w)
 	}
 
+	http.Redirect(w, r, "/", http.StatusFound)
+	return
+}
+
+// MonitorStartGet starts to monior the input api
+func MonitorStartGet(w http.ResponseWriter, r *http.Request) {
+	// Get session
+	sess := session.Instance(r)
+	var params httprouter.Params
+	params = context.Get(r, "params").(httprouter.Params)
+	apiID := params.ByName("id")
+	api, fetchErr := model.APIByID(apiID)
+	if fetchErr != nil {
+		log.Println(fetchErr)
+		sess.AddFlash(view.Flash{Message: "接口不存在!", Class: view.FlashError})
+		sess.Save(r, w)
+	} else {
+		startErr := service.StartMonitor(api)
+		if startErr != nil {
+			sess.AddFlash(view.Flash{Message: "监控启动失败!", Class: view.FlashSuccess})
+			sess.Save(r, w)
+			return
+		}
+		sess.AddFlash(view.Flash{Message: "监控启动成功!", Class: view.FlashSuccess})
+		sess.Save(r, w)
+	}
+	http.Redirect(w, r, "/", http.StatusFound)
+	return
+}
+
+// MonitorPauseGet starts to monior the input api
+func MonitorPauseGet(w http.ResponseWriter, r *http.Request) {
+	// Get session
+	sess := session.Instance(r)
+	var params httprouter.Params
+	params = context.Get(r, "params").(httprouter.Params)
+	apiID := params.ByName("id")
+	api, fetchErr := model.APIByID(apiID)
+	if fetchErr != nil {
+		log.Println(fetchErr)
+		sess.AddFlash(view.Flash{Message: "接口不存在!", Class: view.FlashError})
+		sess.Save(r, w)
+	} else {
+		startErr := service.PauseMonitor(api)
+		if startErr != nil {
+			sess.AddFlash(view.Flash{Message: "监控暂停失败!", Class: view.FlashSuccess})
+			sess.Save(r, w)
+			return
+		}
+		sess.AddFlash(view.Flash{Message: "监控暂停!", Class: view.FlashSuccess})
+		sess.Save(r, w)
+	}
 	http.Redirect(w, r, "/", http.StatusFound)
 	return
 }

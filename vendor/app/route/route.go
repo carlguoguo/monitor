@@ -82,6 +82,14 @@ func routes() *httprouter.Router {
 		New(acl.DisallowAnon).
 		ThenFunc(controller.APIDeleteGet)))
 
+	// Montor
+	r.GET("/monitor/start/:id", hr.Handler(alice.
+		New(acl.DisallowAnon).
+		ThenFunc(controller.MonitorStartGet)))
+	r.GET("/monitor/pause/:id", hr.Handler(alice.
+		New(acl.DisallowAnon).
+		ThenFunc(controller.MonitorPauseGet)))
+
 	// Enable Pprof
 	r.GET("/debug/pprof/*pprof", hr.Handler(alice.
 		New(acl.DisallowAnon).

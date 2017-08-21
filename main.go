@@ -55,7 +55,10 @@ func main() {
 		log.Fatal(err)
 	}
 	for _, api := range apis {
-		service.StartMonitor(api)
+		service.NewMonitor(api)
+		if api.Start == 1 {
+			service.StartMonitor(api)
+		}
 	}
 
 	// Start the listener
