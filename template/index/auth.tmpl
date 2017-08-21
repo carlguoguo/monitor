@@ -16,7 +16,9 @@
                     <td class="text"><span>{{.URL}}</span></td>
                     <td>{{.IntervalTime}}</td>
                     <td>
-                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#updateAPI">
+                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#updateAPI" data-id="{{.ID}}"
+                            data-url="{{.URL}}" data-alias="{{.Alias}}" data-interval="{{.IntervalTime}}" data-alert="{{.AlertReceivers}}" data-timeout="{{.Timeout}}"
+                            data-failMax="{{.FailMax}}">
 								<span class="glyphicon glyphicon-plus" aria-hidden="true"></span> 编辑
 							</button>
                         <a title="Delete Note" class="btn btn-danger" role="button" href="{{$.BaseURI}}api/delete/{{.ID}}">
@@ -41,7 +43,7 @@
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h3 class="modal-title">增加接口</h3>
+                    <h3 class="modal-title">增加监控接口</h3>
                 </div>
                 <form method="post" action="/api/create">
                     <div class="modal-body">
@@ -49,7 +51,7 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-danger" data-dismiss="modal">取消</button>
-                        <input type="submit" value="创建" class="btn btn-primary" />
+                        <input type="submit" value="保存" class="btn btn-primary" />
                     </div>
                 </form>
             </div>
@@ -60,15 +62,15 @@
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h3 class="modal-title">更新接口</h3>
+                    <h3 class="modal-title">编辑监控接口</h3>
                 </div>
-                <form method="post" action="/api/update">
+                <form method="post" action="/api/update/{{.ID}}">
                     <div class="modal-body">
                         {{template "api" .}}
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-danger" data-dismiss="modal">取消</button>
-                        <input type="submit" value="创建" class="btn btn-primary" />
+                        <input type="submit" value="保存" class="btn btn-primary" />
                     </div>
                 </form>
             </div>

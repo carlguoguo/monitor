@@ -37,21 +37,21 @@ type Request struct {
 // APIs return all api
 func APIs() ([]API, error) {
 	var result []API
-	err := database.SQL.Select(&result, "SELECT id, url, interval_time, user_id, created_at, updated_at FROM api")
+	err := database.SQL.Select(&result, "SELECT id, url, interval_time, user_id, alias, alert_receivers, timeout, fail_max, created_at, updated_at FROM api")
 	return result, standardizeError(err)
 }
 
 // APIByID gets api by ID
 func APIByID(apiID string) (API, error) {
 	result := API{}
-	err := database.SQL.Get(&result, "SELECT id, url, interval_time, user_id, created_at, updated_at FROM api WHERE id = ? LIMIT 1", apiID)
+	err := database.SQL.Get(&result, "SELECT id, url, interval_time, user_id, alias, alert_receivers, timeout, fail_max, created_at, updated_at FROM api WHERE id = ? LIMIT 1", apiID)
 	return result, standardizeError(err)
 }
 
 // APIByURL gets api by ID
 func APIByURL(url string) (API, error) {
 	result := API{}
-	err := database.SQL.Get(&result, "SELECT id, url, interval_time, user_id, created_at, updated_at FROM api WHERE url = ? LIMIT 1", url)
+	err := database.SQL.Get(&result, "SELECT id, url, interval_time, user_id, alias, alert_receivers, timeout, fail_max, created_at, updated_at FROM api WHERE url = ? LIMIT 1", url)
 	return result, standardizeError(err)
 }
 
