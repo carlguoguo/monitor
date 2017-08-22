@@ -31,11 +31,11 @@
 		}
 	},
     "Email": {
-		"Username": "",
-		"Password": "",
-		"Hostname": "",
+		"Username": "letv_monitor",
+		"Password": "!@s20170731",
+		"Hostname": "smtp.letv.cn",
 		"Port": 25,
-		"From": ""
+		"From": "letv_monitor@le.com"
 	},
     "Template": {
 		"Root": "base",

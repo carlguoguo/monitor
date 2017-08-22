@@ -5,6 +5,7 @@
         <table class="table">
             <thead>
                 <tr>
+                    <th>监控名</th>
                     <th>接口地址</th>
                     <th>间隔时间(分钟)</th>
                     <th>开始/暂停</th>
@@ -14,6 +15,7 @@
             <tbody>
                 {{range $i, $e := .apis}}
                 <tr>
+                    <td>{{.Alias}}</td>
                     <td class="text"><span>{{.URL}}</span></td>
                     <td>{{.IntervalTime}}</td>
                     <td>

@@ -40,6 +40,8 @@ func main() {
 	// Connect to database
 	database.Connect(config.Database)
 
+	email.Configure(config.Email)
+
 	// Setup the views
 	view.Configure(config.View)
 	view.LoadTemplates(config.Template.Root, config.Template.Children)

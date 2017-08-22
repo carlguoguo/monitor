@@ -29,7 +29,7 @@ func (job *Job) run() {
 func NewJob(jobFunc func(), intervalTime int) Job {
 	job := Job{
 		JobFunc:      jobFunc,
-		IntervalTime: time.NewTicker(time.Duration(intervalTime) * time.Second),
+		IntervalTime: time.NewTicker(time.Duration(intervalTime) * time.Minute),
 		Quit:         make(chan bool, 1),
 	}
 	return job

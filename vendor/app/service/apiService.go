@@ -2,9 +2,12 @@ package service
 
 import (
 	"fmt"
+	"io/ioutil"
 	"net/http"
+	"time"
 
 	"app/model"
+	"app/shared/email"
 	"app/shared/interval"
 )
 
@@ -56,12 +59,44 @@ func RestartMonitor(api model.API) {
 
 func requestGET(api model.API) func() {
 	return func() {
-		resp, err := http.Get(api.URL)
-		if err != nil {
-			fmt.Println(err)
-			return
+		var contentLength int
+		var costTime int
+		var statusCode int
+
+		timeout := time.Duration(api.Timeout) * time.Millisecond
+		client := http.Client{
+			Timeout: timeout,
 		}
-		defer resp.Body.Close()
-		fmt.Printf("%s : %d\n", api.URL, resp.StatusCode)
+		timeStart := time.Now()
+		resp, err := client.Get(api.URL)
+
+		if err != nil || resp.StatusCode != 200 {
+			fmt.Println(err)
+			contentLength = -1
+			costTime = -1
+			if resp != nil {
+				statusCode = resp.StatusCode
+			} else {
+				statusCode = -1
+			}
+
+		} else {
+			defer resp.Body.Close()
+			content, _ := ioutil.ReadAll(resp.Body)
+			statusCode = resp.StatusCode
+			contentLength = len(content)
+			costTime = int(time.Since(timeStart) / time.Millisecond)
+		}
+		fmt.Printf("%s : %d\n", api.URL, statusCode)
+		model.RequestCreate(api.ID, statusCode, costTime, contentLength)
+
+		if api.FailMax == 1 && statusCode != 200 && api.AlertReceivers != "" {
+			subject := "接口监控报警邮件"
+			body := fmt.Sprintf("%s 已经连续请求失败已达预设(%d次)上限，请尽快验证服务", api.URL, api.FailMax)
+			err = email.SendMail(api.AlertReceivers, subject, body)
+			if err != nil {
+				fmt.Println(err)
+			}
+		}
 	}
 }

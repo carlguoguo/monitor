@@ -19,20 +19,12 @@ type API struct {
 	CreatedAt      time.Time `db:"created_at"`
 	UpdatedAt      time.Time `db:"updated_at"`
 	AlertReceivers string    `db:"alert_receivers"`
-	Timeout        uint8     `db:"timeout"`
+	Timeout        int       `db:"timeout"`
 	FailMax        uint8     `db:"fail_max"`
 	CreatedBy      uint32    `db:"user_id"`
 	IntervalTime   uint8     `db:"interval_time"`
 	Start          uint8     `db:"start"`
 	Job            interval.Job
-}
-
-// Request table contains the information for each request status for specific api
-type Request struct {
-	ID     uint32    `db:"id"`
-	APIID  uint32    `db:"api_id"`
-	Status string    `db:"status"`
-	Time   time.Time `db:"time"`
 }
 
 // APIs return all api
@@ -67,7 +59,6 @@ func APIByURL(url string) (API, error) {
 func APICreate(url string, intervalTime int, userID string, alias string, alertReceivers string, timeout int, failMax int) error {
 	_, err := database.SQL.Exec("INSERT INTO api (url, interval_time, user_id, alias, alert_receivers, timeout, fail_max) VALUES (?,?,?,?,?,?,?)", url, intervalTime, userID, alias, alertReceivers, timeout, failMax)
 	return standardizeError(err)
-
 }
 
 // APICreateAndGet creates an api and return API struct
