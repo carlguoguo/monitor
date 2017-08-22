@@ -1,37 +1,40 @@
 {{define "api"}}
 <div class="form-group row">
-	<label for="alias" class="col-sm-2 col-form-label">接口别名</label>
-	<div class="col-sm-10">
+	<label for="alias" class="col-sm-3 col-form-label">接口别名</label>
+	<div class="col-sm-9">
 		<input type="text" class="form-control alias" id="alias" name="alias" maxlength="100" placeholder="接口别名" required/>
 	</div>
 </div>
 <div class="form-group row">
-	<label for="interval_time" class="col-sm-2 col-form-label">间隔时长(分钟)</label>
-	<div class="col-sm-10">
-		<input type="text" class="form-control interval_time" id="interval_time" name="interval_time" maxlength="2" placeholder="5" required/>
+	<label for="interval_time" class="col-sm-3 col-form-label">间隔时长(分钟)</label>
+	<div class="col-sm-9">
+		<input type="hidden" class="form-control interval_time" id="interval_time" name="interval_time" maxlength="2" placeholder="5" required/>
+		<div id="slider">
+			<div id="custom-handle" class="ui-slider-handle"></div>
+		</div>
 	</div>
 </div>
 <div class="form-group row">
-	<label for="url" class="col-sm-2 col-form-label">接口地址</label>
-	<div class="col-sm-10">
+	<label for="url" class="col-sm-3 col-form-label">接口地址</label>
+	<div class="col-sm-9">
 		<input type="text" class="form-control url" id="url" name="url" maxlength="512" placeholder="Url" required/>
 	</div>
 </div>
 <div class="form-group row">
-	<label for="receivers" class="col-sm-2 col-form-label">警报发给</label>
-	<div class="col-sm-10">
+	<label for="receivers" class="col-sm-3 col-form-label">警报发给</label>
+	<div class="col-sm-9">
 		<input type="text" class="form-control receivers" id="receivers" name="receivers" maxlength="512" placeholder="somebody@le.com;another@le.com"/>
 	</div>
 </div>
 <div class="form-group row">
-	<label for="timeout" class="col-sm-2 col-form-label">接口超时阈值(秒)</label>
-	<div class="col-sm-10">
+	<label for="timeout" class="col-sm-3 col-form-label">接口超时阈值(秒)</label>
+	<div class="col-sm-9">
 		<input type="text" class="form-control timeout" id="timeout" name="timeout" maxlength="4" placeholder="2" required/>
 	</div>
 </div>
 <div class="form-group row">
-	<label for="fail_threshold" class="col-sm-2 col-form-label">允许连续失败次数上限</label>
-	<div class="col-sm-10">
+	<label for="fail_threshold" class="col-sm-3 col-form-label">允许连续失败次数上限</label>
+	<div class="col-sm-9">
 		<input type="text" class="form-control fail_threshold" id="fail_threshold" name="fail_threshold" maxlength="3" placeholder="1" required/>
 	</div>
 </div>

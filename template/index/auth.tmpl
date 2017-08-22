@@ -30,9 +30,9 @@
                         {{end}}
                     </td>
                     <td>
-                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#updateAPI" data-id="{{.ID}}"
+                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#api-model" data-id="{{.ID}}"
                             data-url="{{.URL}}" data-alias="{{.Alias}}" data-interval="{{.IntervalTime}}" data-alert="{{.AlertReceivers}}" data-timeout="{{.Timeout}}"
-                            data-failMax="{{.FailMax}}">
+                            data-failMax="{{.FailMax}}" data-title="编辑监控接口" data-action="update">
 								<span class="glyphicon glyphicon-plus" aria-hidden="true"></span> 编辑
 							</button>
                         <a class="btn btn-danger" role="button" href="{{$.BaseURI}}api/delete/{{.ID}}">
@@ -46,52 +46,30 @@
     </div>
     {{end}}
 
-
     <p>
-        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#createAPI">
+        <button id="createAPIButton" type="button" class="btn btn-primary" data-toggle="modal" data-action="create" data-title="增加监控接口" data-target="#api-model">
 			<span class="glyphicon glyphicon-plus" aria-hidden="true"></span> 增加监控接口
 		</button>
     </p>
 
-    <div class="modal fade" id="createAPI" tabindex="-1" role="dialog">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h3 class="modal-title">增加监控接口</h3>
-                </div>
-                <form method="post" action="/api/create">
-                    <div class="modal-body">
-                        {{template "api" .}}
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-danger" data-dismiss="modal">取消</button>
-                        <input type="submit" value="保存" class="btn btn-primary" />
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
-
-    <div class="modal fade" id="updateAPI" tabindex="-1" role="dialog">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h3 class="modal-title">编辑监控接口</h3>
-                </div>
-                <form method="post" action="/api/update/{{.ID}}">
-                    <div class="modal-body">
-                        {{template "api" .}}
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-danger" data-dismiss="modal">取消</button>
-                        <input type="submit" value="保存" class="btn btn-primary" />
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
-
-
+    <div class="modal fade" id="api-model" tabindex="-1" role="dialog">
+       <div class="modal-dialog" role="document">
+           <div class="modal-content">
+               <div class="modal-header">
+                   <h3 class="modal-title"></h3>
+               </div>
+               <form method="post">
+                   <div class="modal-body">
+                       {{template "api" .}}
+                   </div>
+                   <div class="modal-footer">
+                       <button type="button" class="btn btn-danger" data-dismiss="modal">取消</button>
+                       <input type="submit" value="保存" class="btn btn-primary" />
+                   </div>
+               </form>
+           </div>
+       </div>
+   </div>
     {{template "footer" .}}
 </div>
 {{end}} {{define "foot"}}{{end}}
