@@ -8,9 +8,6 @@ $(function() {
     });
     $('#api-model').on('show.bs.modal', function(event) {
         var button = $(event.relatedTarget); // Button that triggered the modal
-        var title = button.data('whatever'); // Extract info from data-* attributes
-        // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
-        // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
         var modal = $(this);
         modal.find('.modal-title').append(button.data('title'));
         modal.find('.modal-body .alias').val(button.data('alias'));
@@ -41,65 +38,6 @@ $(function() {
         });
         $("#interval_time").val($("#slider").slider("value"));
     })
-    // $('#updateAPI').on('show.bs.modal', function (event) {
-    //     var button = $(event.relatedTarget); // Button that triggered the modal
-    // 	var title = button.data('whatever'); // Extract info from data-* attributes
-    // 	// If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
-    // 	// Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
-    // 	var modal = $(this);
-    // 	modal.find('.modal-body .alias').val(button.data('alias'));
-    //     var interval_time = button.data('interval');
-    // 	modal.find('.modal-body .url').val(button.data('url'));
-    // 	modal.find('.modal-body .receivers').val(button.data('alert'));
-    // 	modal.find('.modal-body .timeout').val(button.data('timeout'));
-    // 	modal.find('.modal-body .fail_threshold').val(button.data('failmax'));
-    // 	modal.find('form').attr('action', '/api/update/'+button.data('id'));
-    //     var handle = $( "#updated-custom-handle" );
-    //     $("#updated_slider").slider({
-    //         range: "max",
-    //         min: 1,
-    //         max: 10,
-    //         value: interval_time,
-    //         create: function() {
-    //             handle.text($(this).slider("value"));
-    //         },
-    //         slide: function(event, ui) {
-    //             $("#updated_interval_time").val(ui.value);
-    //             handle.text(ui.value);
-    //         }
-    //     });
-    //     $("#updated_interval_time").val($("#updated_slider").slider("value"));
-    // })
-    //
-    // $('#createAPI').on('show.bs.modal', function (event) {
-    //     var button = $(event.relatedTarget); // Button that triggered the modal
-    // 	var title = button.data('whatever'); // Extract info from data-* attributes
-    // 	// If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
-    // 	// Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
-    // 	var modal = $(this);
-    // 	modal.find('.modal-body .alias').val(button.data('alias'));
-    //     var interval_time = button.data('interval');
-    // 	modal.find('.modal-body .url').val(button.data('url'));
-    // 	modal.find('.modal-body .receivers').val(button.data('alert'));
-    // 	modal.find('.modal-body .timeout').val(button.data('timeout'));
-    // 	modal.find('.modal-body .fail_threshold').val(button.data('failmax'));
-    // 	modal.find('form').attr('action', '/api/update/'+button.data('id'));
-    //     var handle = $( "#created-custom-handle" );
-    //     $("#created_slider").slider({
-    //         range: "max",
-    //         min: 1,
-    //         max: 10,
-    //         value: interval_time,
-    //         create: function() {
-    //             handle.text($(this).slider("value"));
-    //         },
-    //         slide: function(event, ui) {
-    //             $("#created_interval_time").val(ui.value);
-    //             handle.text(ui.value);
-    //         }
-    //     });
-    //     $("#created_interval_time").val($("#created_slider").slider("value"));
-    // })
 });
 
 function hideFlash(rnum) {
