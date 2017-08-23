@@ -62,12 +62,10 @@ func requestGET(api model.API) func() {
 		var contentLength int
 		var costTime int
 		var statusCode int
-
-		timeout := time.Duration(api.Timeout) * time.Millisecond
-		client := http.Client{
-			Timeout: timeout,
-		}
 		timeStart := time.Now()
+		client := http.Client{
+			Timeout: time.Duration(api.Timeout) * time.Millisecond,
+		}
 		resp, err := client.Get(api.URL)
 
 		if err != nil || resp.StatusCode != 200 {
@@ -75,11 +73,11 @@ func requestGET(api model.API) func() {
 			contentLength = -1
 			costTime = -1
 			if resp != nil {
+				defer resp.Body.Close()
 				statusCode = resp.StatusCode
 			} else {
 				statusCode = -1
 			}
-
 		} else {
 			defer resp.Body.Close()
 			content, _ := ioutil.ReadAll(resp.Body)
@@ -89,6 +87,29 @@ func requestGET(api model.API) func() {
 		}
 		fmt.Printf("%s : %d\n", api.URL, statusCode)
 		model.RequestCreate(api.ID, statusCode, costTime, contentLength)
+
+		apiStatus, err := model.APIStatusByID(api.ID)
+		if err != nil {
+			fmt.Println(err)
+		} else {
+			okCount := apiStatus.OKCount
+			totalCount := apiStatus.Count
+			averageResponseTime := apiStatus.AverageResponseTime
+			totalCount++
+			var status int
+			if statusCode == 200 {
+				status = 1
+				averageResponseTime = (averageResponseTime*okCount + costTime) / (okCount + 1)
+				okCount++
+			} else {
+				status = -1
+			}
+			upPercentage := float64(okCount) / float64(totalCount)
+			apiStatusUpdateErr := model.APIStatusUpdate(api.ID, status, totalCount, okCount, upPercentage, averageResponseTime)
+			if apiStatusUpdateErr != nil {
+				fmt.Println(apiStatusUpdateErr)
+			}
+		}
 
 		if api.FailMax == 1 && statusCode != 200 && api.AlertReceivers != "" {
 			subject := "接口监控报警邮件"

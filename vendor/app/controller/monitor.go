@@ -28,7 +28,6 @@ func APICreatePOST(w http.ResponseWriter, r *http.Request) {
 
 	// Get database result
 	newAPI, creationErr := model.APICreateAndGet(url, intervalTime, userID, alias, alertReceivers, timeout, failMax)
-
 	if creationErr != nil {
 		log.Println(creationErr)
 		sess.AddFlash(view.Flash{Message: "服务器错误，请重试!", Class: view.FlashError})
@@ -36,6 +35,7 @@ func APICreatePOST(w http.ResponseWriter, r *http.Request) {
 	} else {
 		sess.AddFlash(view.Flash{Message: "新接口已经添加!", Class: view.FlashSuccess})
 		sess.Save(r, w)
+		model.APIStatusCreate(newAPI.ID)
 		service.NewMonitor(newAPI)
 		http.Redirect(w, r, "/", http.StatusFound)
 		return

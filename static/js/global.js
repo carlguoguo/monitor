@@ -32,11 +32,11 @@ $(function() {
             max: 10,
             value: interval_time,
             create: function() {
-                handle.text($(this).slider("value"));
+                handle.text($(this).slider("value") + " 分钟");
             },
             slide: function(event, ui) {
                 $("#interval_time").val(ui.value);
-                handle.text(ui.value);
+                handle.text(ui.value + " 分钟");
             }
         });
         $("#interval_time").val($("#slider").slider("value"));

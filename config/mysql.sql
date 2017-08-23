@@ -67,6 +67,19 @@ CREATE TABLE api (
     PRIMARY KEY (id)
 );
 
+CREATE TABLE api_status (
+    id INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
+    api_id INT(10) UNSIGNED NOT NULL,
+    status INT(1) NOT NULL DEFAULT 0,
+    up_percentage FLOAT DEFAULT 0,
+    up_since INT NOT NULL DEFAULT 0,
+    average_response_time INT NOT NULL DEFAULT 0,
+    ok_count INT NOT NULL DEFAULT 0,
+    count INT NOT NULL DEFAULT 0,
+    CONSTRAINT `f_status_api` FOREIGN KEY (`api_id`) REFERENCES `api` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+    PRIMARY KEY (id)
+);
+
 CREATE TABLE request (
     id INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
     api_id INT(10) UNSIGNED NOT NULL,
@@ -75,5 +88,5 @@ CREATE TABLE request (
     content_size INT(10) UNSIGNED NOT NULL,
     request_time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     CONSTRAINT `f_request_api` FOREIGN KEY (`api_id`) REFERENCES `api` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-        PRIMARY KEY (id)
+    PRIMARY KEY (id)
 );

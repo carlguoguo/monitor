@@ -2,22 +2,39 @@
 <div class="container">
     {{if .apis}}
     <div class="panel-body">
-        <table class="table">
+        <table class="table table-striped">
             <thead>
                 <tr>
+                    <th></th>
                     <th>监控名</th>
                     <th>接口地址</th>
-                    <th>间隔时间(分钟)</th>
-                    <th>开始/暂停</th>
+                    <th>UPTIME</th>
+                    <th>平均响应时间</th>
                     <th>管理</th>
                 </tr>
             </thead>
             <tbody>
                 {{range $i, $e := .apis}}
                 <tr>
+                    {{if eq 1 (index $.apisStatus .ID).Status}}
+                        <td>
+                            <span class="glyphicon glyphicon glyphicon-ok-sign" style="color:#9ae944;font-size: 25px;" aria-hidden="true"></span>
+                        </td>
+                    {{end}}
+                    {{if eq 0 (index $.apisStatus .ID).Status }}
+                        <td>
+                            <span class="glyphicon glyphicon-question-sign" style="color:#c6c6c6;font-size: 25px;" aria-hidden="true"></span>
+                        </td>
+                    {{end}}
+                    {{if eq -1 (index $.apisStatus .ID).Status }}
+                        <td>
+                            <span class="glyphicon glyphicon-remove-sign" style="color:#ff4c4c;font-size: 25px;" aria-hidden="true"></span>
+                        </td>
+                    {{end}}
                     <td>{{.Alias}}</td>
                     <td class="text"><span>{{.URL}}</span></td>
-                    <td>{{.IntervalTime}}</td>
+                    <td>{{TIMES ((index $.apisStatus .ID).UpPercentage) 100}}%</td>
+                    <td>{{(index $.apisStatus .ID).AverageResponseTime}} 毫秒</td>
                     <td>
                         {{if eq 0 .Start}}
                         <a class="btn btn-success" role="button" href="{{$.BaseURI}}monitor/start/{{.ID}}">
@@ -28,8 +45,6 @@
     							<span class="glyphicon glyphicon-pause" aria-hidden="true"></span> 暂停监控
     						</a>
                         {{end}}
-                    </td>
-                    <td>
                         <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#api-model" data-id="{{.ID}}"
                             data-url="{{.URL}}" data-alias="{{.Alias}}" data-interval="{{.IntervalTime}}" data-alert="{{.AlertReceivers}}" data-timeout="{{.Timeout}}"
                             data-failMax="{{.FailMax}}" data-title="编辑监控接口" data-action="update">
@@ -56,7 +71,8 @@
        <div class="modal-dialog" role="document">
            <div class="modal-content">
                <div class="modal-header">
-                   <h3 class="modal-title"></h3>
+                   <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                   <h4 class="modal-title"></h4>
                </div>
                <form method="post">
                    <div class="modal-body">

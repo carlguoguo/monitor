@@ -1,11 +1,11 @@
 /* Global Styles */
 
 body {
-    font-family: "Open Sans", Helvetica, Arial, sans-serif !important;
+    font-family: Pingvetica, "Helvetica Neue", Helvetica, "Segoe UI", Arial, sans-serif, "微软雅黑";
 }
 
 h1, h2, h3, h4, h5, h6 {
-    font-family: "Open Sans", Helvetica, Arial, sans-serif;
+    font-family: Pingvetica, "Helvetica Neue", Helvetica, "Segoe UI", Arial, sans-serif, "微软雅黑";
 }
 
 .page-header {
@@ -40,11 +40,35 @@ h1, h2, h3, h4, h5, h6 {
     max-width: 100%;
 }
 
+.row {
+  margin-top: 25px;
+  margin-bottom: 25px;
+}
+
 #custom-handle {
-    width: 3em;
-    height: 1.6em;
+    width: 4em;
+    height: 2.4em;
     top: 50%;
-    margin-top: -.8em;
+    margin-top: -1.2em;
     text-align: center;
-    line-height: 1.6em;
+    line-height: 2.5em;
+}
+
+.modal {
+  text-align: center;
+}
+
+@media screen and (min-width: 768px) {
+  .modal:before {
+    display: inline-block;
+    vertical-align: middle;
+    content: " ";
+    height: 100%;
+  }
+}
+
+.modal-dialog {
+  display: inline-block;
+  text-align: left;
+  vertical-align: middle;
 }
