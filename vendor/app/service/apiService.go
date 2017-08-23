@@ -86,9 +86,10 @@ func requestGET(api model.API) func() {
 			costTime = int(time.Since(timeStart) / time.Millisecond)
 		}
 		fmt.Printf("%s : %d\n", api.URL, statusCode)
-		model.RequestCreate(api.ID, statusCode, costTime, contentLength)
+		apiID := fmt.Sprintf("%d", api.ID)
+		model.RequestCreate(apiID, statusCode, costTime, contentLength)
 
-		apiStatus, err := model.APIStatusByID(api.ID)
+		apiStatus, err := model.APIStatusByID(apiID)
 		if err != nil {
 			fmt.Println(err)
 		} else {
@@ -105,7 +106,7 @@ func requestGET(api model.API) func() {
 				status = -1
 			}
 			upPercentage := float64(okCount) / float64(totalCount)
-			apiStatusUpdateErr := model.APIStatusUpdate(api.ID, status, totalCount, okCount, upPercentage, averageResponseTime)
+			apiStatusUpdateErr := model.APIStatusUpdate(apiID, status, totalCount, okCount, upPercentage, averageResponseTime)
 			if apiStatusUpdateErr != nil {
 				fmt.Println(apiStatusUpdateErr)
 			}

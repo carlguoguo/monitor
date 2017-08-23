@@ -1,17 +1,76 @@
 /* Global Styles */
 
+/*
+ * Base structure
+ */
+
+/* Move down content because we have a fixed navbar that is 3.5rem tall */
 body {
-    font-family: Pingvetica, "Helvetica Neue", Helvetica, "Segoe UI", Arial, sans-serif, "微软雅黑";
+  padding-top: 3.5rem;
 }
 
-h1, h2, h3, h4, h5, h6 {
-    font-family: Pingvetica, "Helvetica Neue", Helvetica, "Segoe UI", Arial, sans-serif, "微软雅黑";
+/*
+ * Typography
+ */
+
+h1 {
+  margin-bottom: 20px;
+  padding-bottom: 9px;
+  border-bottom: 1px solid #eee;
 }
 
-.page-header {
-    border-bottom: 0;
-    margin-top: 0;
+/*
+ * Sidebar
+ */
+
+.sidebar {
+  position: fixed;
+  top: 51px;
+  bottom: 0;
+  left: 0;
+  z-index: 1000;
+  padding: 20px;
+  overflow-x: hidden;
+  overflow-y: auto; /* Scrollable contents if viewport is shorter than content. */
+  border-right: 1px solid #eee;
 }
+
+/* Sidebar navigation */
+.sidebar {
+  padding-left: 0;
+  padding-right: 0;
+}
+
+.sidebar .nav {
+  margin-bottom: 20px;
+}
+
+.sidebar .nav-item {
+  width: 100%;
+}
+
+.sidebar .nav-item + .nav-item {
+  margin-left: 0;
+}
+
+.sidebar .nav-link {
+  border-radius: 0;
+}
+
+/*
+ * Dashboard
+ */
+
+ /* Placeholders */
+.placeholders {
+  padding-bottom: 3rem;
+}
+
+.placeholder img {
+  padding-top: 1.5rem;
+  padding-bottom: 1.5rem;
+}
+
 
 
 /* Notification Styles */

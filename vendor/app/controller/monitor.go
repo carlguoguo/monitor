@@ -35,7 +35,7 @@ func APICreatePOST(w http.ResponseWriter, r *http.Request) {
 	} else {
 		sess.AddFlash(view.Flash{Message: "新接口已经添加!", Class: view.FlashSuccess})
 		sess.Save(r, w)
-		model.APIStatusCreate(newAPI.ID)
+		model.APIStatusCreate(fmt.Sprintf("%d", newAPI.ID))
 		service.NewMonitor(newAPI)
 		http.Redirect(w, r, "/", http.StatusFound)
 		return
@@ -106,6 +106,33 @@ func APIDeleteGet(w http.ResponseWriter, r *http.Request) {
 
 	http.Redirect(w, r, "/", http.StatusFound)
 	return
+}
+
+// APIDetailGet display the api detail
+func APIDetailGet(w http.ResponseWriter, r *http.Request) {
+	session := session.Instance(r)
+	var params httprouter.Params
+	params = context.Get(r, "params").(httprouter.Params)
+	apiID := params.ByName("id")
+	api, apiErr := model.APIByID(apiID)
+	apiStatus, apiStatusErr := model.APIStatusByID(apiID)
+	request, requestErr := model.RequestByAPIID(apiID)
+	if apiErr != nil || apiStatusErr != nil || requestErr != nil {
+		log.Println(apiErr)
+		log.Println(apiStatusErr)
+		log.Println(requestErr)
+		session.AddFlash(view.Flash{Message: "服务器错误，请重试!", Class: view.FlashError})
+		session.Save(r, w)
+		http.Redirect(w, r, "/", http.StatusFound)
+		return
+	}
+	v := view.New(r)
+	v.Name = "api/detail"
+	v.Vars["username"] = session.Values["username"]
+	v.Vars["api"] = api
+	v.Vars["apiStatus"] = apiStatus
+	v.Vars["request"] = request
+	v.Render(w)
 }
 
 // MonitorStartGet starts to monior the input api

@@ -19,19 +19,19 @@ type APIStatus struct {
 }
 
 // APIStatusCreate creates an api status
-func APIStatusCreate(apiID uint32) error {
+func APIStatusCreate(apiID string) error {
 	_, err := database.SQL.Exec("INSERT INTO api_status (api_id) VALUES (?)", apiID)
 	return standardizeError(err)
 }
 
 // APIStatusUpdate updates an api status
-func APIStatusUpdate(apiID uint32, status int, count int, okCount int, upPercentage float64, averageResponseTime int) error {
+func APIStatusUpdate(apiID string, status int, count int, okCount int, upPercentage float64, averageResponseTime int) error {
 	_, err := database.SQL.Exec("UPDATE api_status SET count=?, ok_count=?, status=?, up_percentage=?, average_response_time=? WHERE id=? LIMIT 1", count, okCount, status, upPercentage, averageResponseTime, apiID)
 	return standardizeError(err)
 }
 
 // APIStatusByID find the api status by api id
-func APIStatusByID(apiID uint32) (APIStatus, error) {
+func APIStatusByID(apiID string) (APIStatus, error) {
 	result := APIStatus{}
 	err := database.SQL.Get(&result, "SELECT * FROM api_status WHERE api_id = ? LIMIT 1", apiID)
 	return result, standardizeError(err)
@@ -45,7 +45,7 @@ func APIStatusAll() ([]APIStatus, error) {
 }
 
 // APIStatusUpdateAndReturn updates an api status and return it
-func APIStatusUpdateAndReturn(apiID uint32, status int, count int, okCount int, upPercentage float64, averageResponseTime int) (APIStatus, error) {
+func APIStatusUpdateAndReturn(apiID string, status int, count int, okCount int, upPercentage float64, averageResponseTime int) (APIStatus, error) {
 	var err error
 	updateErr := APIStatusUpdate(apiID, status, count, okCount, upPercentage, averageResponseTime)
 	if updateErr != nil {
