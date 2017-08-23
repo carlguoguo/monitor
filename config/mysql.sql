@@ -53,7 +53,7 @@ INSERT INTO `user_status` (`id`, `status`, `created_at`, `updated_at`, `deleted`
 
 CREATE TABLE api (
     id INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
-    url CHAR(255) NOT NULL,
+    url VARCHAR(1000) NOT NULL,
     alias CHAR(50) NOT NULL,
     alert_receivers VARCHAR(1000),
     timeout INT(4) NOT NULL,

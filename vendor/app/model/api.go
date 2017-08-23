@@ -67,6 +67,7 @@ func APICreateAndGet(url string, intervalTime int, userID string, alias string, 
 	creationErr := APICreate(url, intervalTime, userID, alias, alertReceivers, timeout, failMax)
 	if creationErr != nil {
 		err = creationErr
+		return API{}, standardizeError(err)
 	}
 	api, fetchErr := APIByURL(url)
 	if fetchErr != nil {
