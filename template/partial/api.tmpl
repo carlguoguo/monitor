@@ -1,15 +1,15 @@
 {{define "api"}}
 <div class="form-group row">
 	<label for="alias" class="col-sm-3 col-form-label">接口别名</label>
-	<div class="col-sm-4">
+	<div class="col-sm-8">
 		<input type="text" class="form-control alias" id="alias" name="alias" maxlength="100" placeholder="接口别名" required/>
 	</div>
 </div>
 <div class="form-group row">
 	<label for="interval_time" class="col-sm-3 col-form-label">间隔时长</label>
-	<div class="col-sm-6">
+	<div class="col-sm-8">
 		<input type="hidden" class="form-control interval_time" id="interval_time" name="interval_time" maxlength="2" placeholder="5" required/>
-		<div id="slider">
+		<div id="slider" style="margin-top:13px">
 			<div id="custom-handle" class="ui-slider-handle"></div>
 		</div>
 	</div>
@@ -28,9 +28,9 @@
 </div>
 <div class="form-group row">
 	<label for="timeout" class="col-sm-3 col-form-label">接口超时</label>
-	<div class="col-sm-3">
+	<div class="col-sm-4">
 		<div class="input-group">
-			<input type="text" class="form-control timeout" id="timeout" name="timeout" maxlength="4" placeholder="2" required/>
+			<input type="text" class="form-control timeout" id="timeout" name="timeout" maxlength="4" placeholder="2000" required/>
 	      	<div class="input-group-addon">毫秒</div>
 	    </div>
 	</div>

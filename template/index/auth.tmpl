@@ -1,6 +1,8 @@
 {{define "title"}}{{end}}
 {{define "head"}}{{end}}
+{{define "body"}}{{end}}
 {{define "content"}}
+    <h2>仪表盘</h2>
     {{if .apis}}
     <div class="table-responsive">
         <table class="table table-striped">
@@ -65,8 +67,8 @@
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                     <h4 class="modal-title"></h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                 </div>
                 <form method="post">
                     <div class="modal-body">

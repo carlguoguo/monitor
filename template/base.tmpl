@@ -25,7 +25,13 @@
     <link rel="icon" type="image/png" href="/static/favicons/favicon-16x16.png" sizes="16x16">
     <link rel="icon" type="image/png" href="/static/favicons/favicon-32x32.png" sizes="32x32">
     <meta name="msapplication-TileColor" content="#da532c">
-    <meta name="msapplication-TileImage" content="/static/favicons/mstile-144x144.png"> {{CSS "static/css/bootstrap.min.css"}} {{CSS "static/css/jquery-ui.css"}} {{CSS "static/css/global.css"}}
+    <meta name="msapplication-TileImage" content="/static/favicons/mstile-144x144.png">
+    {{if eq .AuthLevel "auth"}}
+        {{CSS "static/css/global.css"}}
+    {{else}}
+        {{CSS "static/css/login.css"}}
+    {{end}}
+    {{CSS "static/css/bootstrap.min.css"}} {{CSS "static/css/jquery-ui.css"}}
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
@@ -36,6 +42,7 @@
 </head>
 
 <body>
+    {{if eq .AuthLevel "auth"}}
     <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
         <a class="navbar-brand" href="{{.BaseURI}}">超级影视监控系统</a>
         <button class="navbar-toggler d-lg-none" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
@@ -63,20 +70,31 @@
     </div>
     <div class="container-fluid">
         <div class="row">
-            <nav class="col-sm-3 col-md-2 d-none d-sm-block bg-light sidebar">
+            <div class="col-md-2 no-float">
                 <ul class="nav nav-pills flex-column">
                     <li class="nav-item">
-                        <a class="nav-link active" href="#">Overview <span class="sr-only">(current)</span></a>
+                        <a class="nav-link active" href="#">监控总览 <span class="sr-only">(current)</span></a>
                     </li>
                 </ul>
-            </nav>
-            <main class="col-sm-9 ml-sm-auto col-md-10 pt-3" role="main">
-                <h2>Dashboard</h2>
-                {{template "content" .}}
-            </main>
+            </div>
+            <!-- <nav class="col-sm-3 col-md-2 d-none d-sm-block bg-light sidebar">
+                <ul class="nav nav-pills flex-column">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="#">监控总览 <span class="sr-only">(current)</span></a>
+                    </li>
+                </ul>
+            </nav> -->
+            <div class="col-md-10 no-float">
+                <!-- <main class="col-sm-9 ml-sm-auto col-md-10 pt-3" role="main"> -->
+                    {{template "content" .}}
+                <!-- </main> -->
+            </div>
         </div>
     </div>
-    {{JS "static/js/jquery-1.12.4.js"}} {{JS "static/js/jquery-ui.js"}} {{JS "static/js/underscore-min.js"}} {{JS "static/js/bootstrap.min.js"}} {{JS "static/js/global.js"}}
+    {{else}}
+        {{template "body" .}}
+    {{end}}
+    {{JS "static/js/jquery-1.12.4.js"}} {{JS "static/js/jquery-ui.js"}} {{JS "static/js/underscore-min.js"}} {{JS "static/js/popper.min.js"}} {{JS "static/js/bootstrap.min.js"}} {{JS "static/js/global.js"}}
 </body>
 
 </html>

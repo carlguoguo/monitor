@@ -37,10 +37,6 @@ func IndexGET(w http.ResponseWriter, r *http.Request) {
 		v.Vars["apisStatus"] = apisStatus
 		v.Render(w)
 	} else {
-		// Display the view
-		v := view.New(r)
-		v.Name = "index/anon"
-		v.Render(w)
-		return
+		LoginGET(w, r)
 	}
 }
