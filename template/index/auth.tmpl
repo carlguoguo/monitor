@@ -2,13 +2,13 @@
 {{define "head"}}{{end}}
 {{define "body"}}{{end}}
 {{define "content"}}
-    <h2>仪表盘</h2>
+    <h1 class="dashboard">仪表盘</h1>
     {{if .apis}}
     <div class="table-responsive">
         <table class="table table-striped">
             <thead>
                 <tr>
-                    <th></th>
+                    <th>最新状态</th>
                     <th>监控名</th>
                     <th>接口地址</th>
                     <th>UPTIME</th>
@@ -20,17 +20,11 @@
                 {{range $i, $e := .apis}}
                 <tr>
                     {{if eq 1 (index $.apisStatus .ID).Status}}
-                    <td>
-                        <span class="glyphicon glyphicon glyphicon-ok-sign" style="color:#9ae944;font-size: 25px;" aria-hidden="true"></span>
-                    </td>
+                    <td><span class="badge badge-pill badge-success">up</span></td>
                     {{end}} {{if eq 0 (index $.apisStatus .ID).Status }}
-                    <td>
-                        <span class="glyphicon glyphicon-question-sign" style="color:#c6c6c6;font-size: 25px;" aria-hidden="true"></span>
-                    </td>
+                    <td><span class="badge badge-pill badge-default">?</span></td>
                     {{end}} {{if eq -1 (index $.apisStatus .ID).Status }}
-                    <td>
-                        <span class="glyphicon glyphicon-remove-sign" style="color:#ff4c4c;font-size: 25px;" aria-hidden="true"></span>
-                    </td>
+                    <td><span class="badge badge-pill badge-danger">down</span></td>
                     {{end}}
                     <td>{{.Alias}}</td>
                     <td class="text"><span>{{.URL}}</span></td>
@@ -38,17 +32,17 @@
                     <td>{{(index $.apisStatus .ID).AverageResponseTime}} 毫秒</td>
                     <td>
                         {{if eq 0 .Start}}
-                        <a class="btn btn-success" role="button" href="{{$.BaseURI}}monitor/start/{{.ID}}">
+                        <a class="btn btn-outline-success" role="button" href="{{$.BaseURI}}monitor/start/{{.ID}}">
         							<span class="glyphicon glyphicon-play" aria-hidden="true"></span> 开始监控
         						</a> {{else}}
-                        <a class="btn btn-warning" role="button" href="{{$.BaseURI}}monitor/pause/{{.ID}}">
+                        <a class="btn btn-outline-warning" role="button" href="{{$.BaseURI}}monitor/pause/{{.ID}}">
         							<span class="glyphicon glyphicon-pause" aria-hidden="true"></span> 暂停监控
         						</a> {{end}}
-                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#api-model" data-id="{{.ID}}" data-url="{{.URL}}" data-alias="{{.Alias}}" data-interval="{{.IntervalTime}}" data-alert="{{.AlertReceivers}}" data-timeout="{{.Timeout}}" data-failMax="{{.FailMax}}"
+                        <button type="button" class="btn btn-outline-secondary" data-toggle="modal" data-target="#api-model" data-id="{{.ID}}" data-url="{{.URL}}" data-alias="{{.Alias}}" data-interval="{{.IntervalTime}}" data-alert="{{.AlertReceivers}}" data-timeout="{{.Timeout}}" data-failMax="{{.FailMax}}"
                             data-title="编辑监控接口" data-action="update">
     								<span class="glyphicon glyphicon-plus" aria-hidden="true"></span> 编辑
     							</button>
-                        <a class="btn btn-danger" role="button" href="{{$.BaseURI}}api/delete/{{.ID}}">
+                        <a class="btn btn-outline-danger" role="button" href="{{$.BaseURI}}api/delete/{{.ID}}">
     								<span class="glyphicon glyphicon-trash" aria-hidden="true"></span> 删除
     							</a>
                     </td>
@@ -57,14 +51,14 @@
             </tbody>
         </table>
         <p>
-            <button id="createAPIButton" type="button" class="btn btn-primary" data-toggle="modal" data-action="create" data-title="增加监控接口" data-target="#api-model">
+            <button id="createAPIButton" type="button" class="btn btn-outline-primary" data-toggle="modal" data-action="create" data-title="增加监控接口" data-target="#api-model">
                     <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> 增加监控接口
                 </button>
         </p>
     </div>
     {{end}}
     <div class="modal fade" id="api-model" tabindex="-1" role="dialog">
-        <div class="modal-dialog" role="document">
+        <div class="modal-dialog modal-lg" role="document">
             <div class="modal-content">
                 <div class="modal-header">
                     <h4 class="modal-title"></h4>

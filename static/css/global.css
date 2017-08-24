@@ -13,10 +13,9 @@ body {
  * Typography
  */
 
-h1 {
-  margin-bottom: 20px;
-  padding-bottom: 9px;
-  border-bottom: 1px solid #eee;
+.dashboard{
+  padding-bottom: 20px;
+  padding-top: 20px;
 }
 
 /*
@@ -127,24 +126,24 @@ h1 {
     line-height: 2.5em;
 }
 
-.modal {
+/*.modal {
   text-align: center;
-}
+}*/
 
-@media screen and (min-width: 768px) {
+/*@media screen and (min-width: 768px) {
   .modal:before {
     display: inline-block;
     vertical-align: middle;
     content: " ";
     height: 100%;
   }
-}
+}*/
 
-.modal-dialog {
+/*.modal-dialog {
   display: inline-block;
   text-align: left;
   vertical-align: middle;
-}
+}*/
 
 .navbar{
     background: #092756;
