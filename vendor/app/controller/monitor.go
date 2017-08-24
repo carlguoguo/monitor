@@ -1,6 +1,7 @@
 package controller
 
 import (
+	"bytes"
 	"fmt"
 	"log"
 	"net/http"
@@ -116,7 +117,7 @@ func APIDetailGet(w http.ResponseWriter, r *http.Request) {
 	apiID := params.ByName("id")
 	api, apiErr := model.APIByID(apiID)
 	apiStatus, apiStatusErr := model.APIStatusByID(apiID)
-	request, requestErr := model.RequestByAPIID(apiID)
+	requests, requestErr := model.RequestByAPIID(apiID, 10)
 	if apiErr != nil || apiStatusErr != nil || requestErr != nil {
 		log.Println(apiErr)
 		log.Println(apiStatusErr)
@@ -131,8 +132,61 @@ func APIDetailGet(w http.ResponseWriter, r *http.Request) {
 	v.Vars["username"] = session.Values["username"]
 	v.Vars["api"] = api
 	v.Vars["apiStatus"] = apiStatus
-	v.Vars["request"] = request
+	v.Vars["requests"] = requests
 	v.Render(w)
+}
+
+type point struct {
+	Date  string
+	Value int
+}
+
+func (p *point) marshalJSON() ([]byte, error) {
+	var buf bytes.Buffer
+	buf.WriteString(`["`)
+	buf.WriteString(p.Date)
+	buf.WriteString(`",`)
+	buf.WriteString(strconv.Itoa(p.Value))
+	buf.WriteRune(']')
+
+	return buf.Bytes(), nil
+}
+
+// APIRequestDetail return api request detail data
+func APIRequestDetail(w http.ResponseWriter, r *http.Request) {
+	var params httprouter.Params
+	params = context.Get(r, "params").(httprouter.Params)
+	apiID := params.ByName("id")
+	requests, requestErr := model.RequestByAPIID(apiID, -1)
+	if requestErr != nil {
+		http.Error(w, requestErr.Error(), http.StatusInternalServerError)
+		return
+	}
+	result := []byte{}
+	total := len(requests)
+	for index, request := range requests {
+		p := point{Date: request.RequestTime.Format("2006-01-02 15:04:05"), Value: request.Cost}
+		if index == 0 {
+			var buf bytes.Buffer
+			buf.WriteRune('[')
+			result = append(result, buf.Bytes()...)
+		}
+		s, _ := p.marshalJSON()
+		result = append(result, s...)
+		if index == total-1 {
+			var buf bytes.Buffer
+			buf.WriteRune(']')
+			result = append(result, buf.Bytes()...)
+		} else {
+			var buf bytes.Buffer
+			buf.WriteRune(',')
+			result = append(result, buf.Bytes()...)
+		}
+	}
+
+	w.Header().Set("Content-Type", "text/json")
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+	w.Write(result)
 }
 
 // MonitorStartGet starts to monior the input api

@@ -1,8 +1,54 @@
-{{define "title"}}{{end}} {{define "head"}}{{end}} {{define "content"}}
-<div class="container">
-	<div class="panel-body">
-		
-	</div>
-    {{template "footer" .}}
+{{define "title"}}{{end}}
+{{define "head"}}{{end}}
+{{define "body"}}{{end}}
+{{define "content"}}
+<input id="api-ID" type="hidden" value="{{.api.ID}}"/>
+<h1 class="dashboard">Uptime 信息</h1>
+<div class="main-chart-title">
+	<h2>{{.api.Alias}}</h2>
+	<a href={{.api.URL}}>{{.api.URL}}</a>
 </div>
-{{end}} {{define "foot"}}{{end}}
+<div class="row">
+	<div class="col-md-9">
+		<div id="container" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+	</div>
+	<div class="col-md-3">
+		<div class="chart-info">
+			<p class="chart-info-header">DOWNTIME</p>
+			<h2 class="chart-outages">{{MINUS (.apiStatus.Count) (.apiStatus.OKCount)}}</h2>
+		</div>
+		<div class="chart-info">
+			<p class="chart-info-header">UPTIME</p>
+			<h2 class="chart-downtime">{{TIMES (.apiStatus.UpPercentage) 100}}%</h2>
+		</div>
+	</div>
+</div>
+<h5>最近10次请求详情</h5>
+<div class="table-responsive">
+	<table class="table table-sm">
+		<thead>
+			<tr>
+				<th>状态</th>
+				<th>时间</th>
+				<th>响应时间(毫秒)</th>
+				<th>响应大小(Bytes)</th>
+			</tr>
+		</thead>
+		<tbody>
+			{{range $i, $e := .requests}}
+			<tr>
+				{{if eq 200 .Status}}
+				<td><span class="badge badge-pill badge-success">up</span></td>
+				{{else}}
+				<td><span class="badge badge-pill badge-danger">down</span></td>
+				{{end}}
+				<td>{{.RequestTime}}</td>
+				<td>{{.Cost}}</td>
+				<td>{{.ContentSize}}</td>
+			</tr>
+			{{end}}
+		</tbody>
+	</table>
+</div>
+{{end}}
+{{define "foot"}}{{end}}

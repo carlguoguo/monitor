@@ -20,15 +20,15 @@
                 {{range $i, $e := .apis}}
                 <tr>
                     {{if eq 1 (index $.apisStatus .ID).Status}}
-                    <td><span class="badge badge-pill badge-success">up</span></td>
+                    <td class='clickable-row' data-href='{{$.BaseURI}}api/detail/{{.ID}}'><span class="badge badge-pill badge-success">up</span></td>
                     {{end}} {{if eq 0 (index $.apisStatus .ID).Status }}
-                    <td><span class="badge badge-pill badge-default">?</span></td>
+                    <td class='clickable-row' data-href='{{$.BaseURI}}api/detail/{{.ID}}'><span class="badge badge-pill badge-default">?</span></td>
                     {{end}} {{if eq -1 (index $.apisStatus .ID).Status }}
-                    <td><span class="badge badge-pill badge-danger">down</span></td>
+                    <td class='clickable-row' data-href='{{$.BaseURI}}api/detail/{{.ID}}'><span class="badge badge-pill badge-danger">down</span></td>
                     {{end}}
-                    <td>{{.Alias}}</td>
+                    <td class='clickable-row' data-href='{{$.BaseURI}}api/detail/{{.ID}}'>{{.Alias}}</td>
                     <td class="text"><span>{{.URL}}</span></td>
-                    <td>{{TIMES ((index $.apisStatus .ID).UpPercentage) 100}}%</td>
+                    <td class='clickable-row' data-href='{{$.BaseURI}}api/detail/{{.ID}}'>{{TIMES ((index $.apisStatus .ID).UpPercentage) 100}}%</td>
                     <td>{{(index $.apisStatus .ID).AverageResponseTime}} 毫秒</td>
                     <td>
                         {{if eq 0 .Start}}

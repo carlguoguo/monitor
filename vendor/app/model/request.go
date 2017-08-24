@@ -23,8 +23,14 @@ func RequestCreate(apiID string, status int, cost int, contentSize int) error {
 }
 
 // RequestByAPIID get all requests by api id
-func RequestByAPIID(apiID string) ([]Request, error) {
+func RequestByAPIID(apiID string, limit int) ([]Request, error) {
 	var result []Request
-	err := database.SQL.Select(&result, "SELECT * FROM request WHERE api_id = ?", apiID)
+	var err error
+	if limit > 0 {
+		err = database.SQL.Select(&result, "SELECT * FROM request WHERE api_id = ? order by request_time desc limit ?", apiID, limit)
+	} else {
+		err = database.SQL.Select(&result, "SELECT * FROM request WHERE api_id = ? order by request_time desc", apiID)
+	}
+
 	return result, standardizeError(err)
 }

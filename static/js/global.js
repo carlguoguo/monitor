@@ -37,7 +37,10 @@ $(function() {
             }
         });
         $("#interval_time").val($("#slider").slider("value"));
-    })
+    });
+    $(".clickable-row").click(function() {
+        window.location = $(this).data("href");
+    });
 });
 
 function hideFlash(rnum) {

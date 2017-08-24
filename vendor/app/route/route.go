@@ -84,6 +84,9 @@ func routes() *httprouter.Router {
 	r.GET("/api/detail/:id", hr.Handler(alice.
 		New(acl.DisallowAnon).
 		ThenFunc(controller.APIDetailGet)))
+	r.GET("/data/api/request/:id", hr.Handler(alice.
+		New(acl.DisallowAnon).
+		ThenFunc(controller.APIRequestDetail)))
 
 	// Montor
 	r.GET("/monitor/start/:id", hr.Handler(alice.
