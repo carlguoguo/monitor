@@ -3,11 +3,8 @@
 {{define "body"}}{{end}}
 {{define "content"}}
 <input id="api-ID" type="hidden" value="{{.api.ID}}"/>
-<h1 class="dashboard">Uptime 信息</h1>
-<div class="main-chart-title">
-	<h2>{{.api.Alias}}</h2>
-	<a href={{.api.URL}}>{{.api.URL}}</a>
-</div>
+<h1 class="dashboard">Uptime 信息 - {{.api.Alias}}</h1>
+
 <div class="row">
 	<div class="col-md-9">
 		<div id="container" style="min-width: 310px; height: 400px; margin: 0 auto"></div>

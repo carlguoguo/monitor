@@ -155,6 +155,10 @@ body {
 	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#3E1D6D', endColorstr='#092756',GradientType=1 );
 }
 
+.main-chart-title {
+    width: 200px;
+}
+
 .main-chart-title span {
     color: #999;
     font-size: 13px;
