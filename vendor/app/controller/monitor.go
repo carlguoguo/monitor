@@ -117,7 +117,7 @@ func APIDetailGet(w http.ResponseWriter, r *http.Request) {
 	apiID := params.ByName("id")
 	api, apiErr := model.APIByID(apiID)
 	apiStatus, apiStatusErr := model.APIStatusByID(apiID)
-	requests, requestErr := model.RequestByAPIID(apiID, 10)
+	requests, requestErr := model.RequestByAPIID(apiID, 10, true)
 	if apiErr != nil || apiStatusErr != nil || requestErr != nil {
 		log.Println(apiErr)
 		log.Println(apiStatusErr)
@@ -157,7 +157,7 @@ func APIRequestDetail(w http.ResponseWriter, r *http.Request) {
 	var params httprouter.Params
 	params = context.Get(r, "params").(httprouter.Params)
 	apiID := params.ByName("id")
-	requests, requestErr := model.RequestByAPIID(apiID, -1)
+	requests, requestErr := model.RequestByAPIID(apiID, -1, false)
 	if requestErr != nil {
 		http.Error(w, requestErr.Error(), http.StatusInternalServerError)
 		return

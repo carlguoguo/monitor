@@ -46,8 +46,10 @@ func PauseMonitor(api model.API) error {
 // StopMonitor stop the monitor
 func StopMonitor(api model.API) error {
 	job := apiJobMap[api.ID]
-	delete(apiJobMap, api.ID)
-	job.Stop()
+	if _, ok := apiJobMap[api.ID]; ok {
+		delete(apiJobMap, api.ID)
+		job.Stop()
+	}
 	return nil
 }
 
