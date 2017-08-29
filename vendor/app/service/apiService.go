@@ -91,8 +91,30 @@ func requestGET(api model.API) func() {
 
 		apiStatus, err := model.APIStatusByID(apiID)
 		if err != nil {
-			fmt.Println(err)
+			if err.Error() == "Result not found" {
+				model.APIStatusCreate(apiID)
+				okCount := 0
+				totalCount := 0
+				averageResponseTime := 0
+				totalCount++
+				var status int
+				if statusCode == 200 {
+					status = 1
+					averageResponseTime = costTime / (okCount + 1)
+					okCount++
+				} else {
+					status = -1
+				}
+				upPercentage := float64(okCount) / float64(totalCount)
+				apiStatusUpdateErr := model.APIStatusUpdate(apiID, status, totalCount, okCount, upPercentage, averageResponseTime)
+				if apiStatusUpdateErr != nil {
+					fmt.Println(apiStatusUpdateErr)
+				}
+			} else {
+				fmt.Println(err)
+			}
 		} else {
+
 			okCount := apiStatus.OKCount
 			totalCount := apiStatus.Count
 			averageResponseTime := apiStatus.AverageResponseTime

@@ -36,7 +36,6 @@ func APICreatePOST(w http.ResponseWriter, r *http.Request) {
 	} else {
 		sess.AddFlash(view.Flash{Message: "新接口已经添加!", Class: view.FlashSuccess})
 		sess.Save(r, w)
-		model.APIStatusCreate(fmt.Sprintf("%d", newAPI.ID))
 		service.NewMonitor(newAPI)
 		http.Redirect(w, r, "/", http.StatusFound)
 		return
@@ -116,12 +115,10 @@ func APIDetailGet(w http.ResponseWriter, r *http.Request) {
 	params = context.Get(r, "params").(httprouter.Params)
 	apiID := params.ByName("id")
 	api, apiErr := model.APIByID(apiID)
-	apiStatus, apiStatusErr := model.APIStatusByID(apiID)
-	requests, requestErr := model.RequestByAPIID(apiID, 10)
-	if apiErr != nil || apiStatusErr != nil || requestErr != nil {
+	apiStatus, _ := model.APIStatusByID(apiID)
+	requests, _ := model.RequestByAPIID(apiID, 10)
+	if apiErr != nil {
 		log.Println(apiErr)
-		log.Println(apiStatusErr)
-		log.Println(requestErr)
 		session.AddFlash(view.Flash{Message: "服务器错误，请重试!", Class: view.FlashError})
 		session.Save(r, w)
 		http.Redirect(w, r, "/", http.StatusFound)

@@ -1,6 +1,8 @@
 package model
 
-import "app/shared/database"
+import (
+	"app/shared/database"
+)
 
 // *****************************************************************************
 // APIStatus
@@ -26,7 +28,7 @@ func APIStatusCreate(apiID string) error {
 
 // APIStatusUpdate updates an api status
 func APIStatusUpdate(apiID string, status int, count int, okCount int, upPercentage float64, averageResponseTime int) error {
-	_, err := database.SQL.Exec("UPDATE api_status SET count=?, ok_count=?, status=?, up_percentage=?, average_response_time=? WHERE id=? LIMIT 1", count, okCount, status, upPercentage, averageResponseTime, apiID)
+	_, err := database.SQL.Exec("UPDATE api_status SET count=?, ok_count=?, status=?, up_percentage=?, average_response_time=? WHERE api_id=? LIMIT 1", count, okCount, status, upPercentage, averageResponseTime, apiID)
 	return standardizeError(err)
 }
 
