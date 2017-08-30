@@ -2,7 +2,6 @@ package service
 
 import (
 	"fmt"
-	"io/ioutil"
 	"net/http"
 	"time"
 
@@ -66,7 +65,7 @@ func requestGET(api model.API) func() {
 		client := http.Client{
 			Timeout: time.Duration(api.Timeout) * time.Millisecond,
 		}
-		resp, err := client.Get(api.URL)
+		resp, err := client.Head(api.URL)
 
 		if err != nil || resp.StatusCode != 200 {
 			fmt.Println(err)
@@ -80,9 +79,8 @@ func requestGET(api model.API) func() {
 			}
 		} else {
 			defer resp.Body.Close()
-			content, _ := ioutil.ReadAll(resp.Body)
 			statusCode = resp.StatusCode
-			contentLength = len(content)
+			contentLength = int(resp.ContentLength)
 			costTime = int(time.Since(timeStart) / time.Millisecond)
 		}
 		fmt.Printf("%s : %d\n", api.URL, statusCode)
