@@ -2,7 +2,6 @@ package service
 
 import (
 	"fmt"
-	"io/ioutil"
 	"net/http"
 	"time"
 
@@ -68,7 +67,7 @@ func requestGET(api model.API) func() {
 		client := http.Client{
 			Timeout: time.Duration(api.Timeout) * time.Millisecond,
 		}
-		resp, err := client.Get(api.URL)
+		resp, err := client.Head(api.URL)
 
 		if err != nil || resp.StatusCode != 200 {
 			fmt.Println(err)
@@ -82,9 +81,8 @@ func requestGET(api model.API) func() {
 			}
 		} else {
 			defer resp.Body.Close()
-			content, _ := ioutil.ReadAll(resp.Body)
 			statusCode = resp.StatusCode
-			contentLength = len(content)
+			contentLength = int(resp.ContentLength)
 			costTime = int(time.Since(timeStart) / time.Millisecond)
 		}
 		fmt.Printf("%s : %d\n", api.URL, statusCode)
@@ -93,8 +91,30 @@ func requestGET(api model.API) func() {
 
 		apiStatus, err := model.APIStatusByID(apiID)
 		if err != nil {
-			fmt.Println(err)
+			if err.Error() == "Result not found" {
+				model.APIStatusCreate(apiID)
+				okCount := 0
+				totalCount := 0
+				averageResponseTime := 0
+				totalCount++
+				var status int
+				if statusCode == 200 {
+					status = 1
+					averageResponseTime = costTime / (okCount + 1)
+					okCount++
+				} else {
+					status = -1
+				}
+				upPercentage := float64(okCount) / float64(totalCount)
+				apiStatusUpdateErr := model.APIStatusUpdate(apiID, status, totalCount, okCount, upPercentage, averageResponseTime)
+				if apiStatusUpdateErr != nil {
+					fmt.Println(apiStatusUpdateErr)
+				}
+			} else {
+				fmt.Println(err)
+			}
 		} else {
+
 			okCount := apiStatus.OKCount
 			totalCount := apiStatus.Count
 			averageResponseTime := apiStatus.AverageResponseTime

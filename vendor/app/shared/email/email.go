@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"net"
 	"net/smtp"
+	"strings"
 )
 
 var (
@@ -64,7 +65,7 @@ func (a *LoginAuth) Next(fromServer []byte, more bool) ([]byte, error) {
 
 // SendMail sends a mail
 func SendMail(sendTo string, subject string, content string) error {
-	to := []string{sendTo}
+	to := strings.Split(sendTo, ";")
 	msg := []byte(content)
 	auth := NewLoginAuth(e.Username, e.Password)
 	addr := fmt.Sprintf("%s:%d", e.Hostname, e.Port)
