@@ -2,60 +2,73 @@
 {{define "head"}}{{end}}
 {{define "body"}}{{end}}
 {{define "content"}}
-    <h1 class="dashboard">仪表盘</h1>
     {{if .apis}}
-    <div class="table-responsive">
-        <table class="table table-striped">
-            <thead>
-                <tr>
-                    <th>最新状态</th>
-                    <th>监控名</th>
-                    <th>接口地址</th>
-                    <th>UPTIME</th>
-                    <th>平均响应时间</th>
-                    <th>管理</th>
-                </tr>
-            </thead>
-            <tbody>
-                {{range $i, $e := .apis}}
-                <tr>
-                    {{if eq 1 (index $.apisStatus .ID).Status}}
-                    <td class='clickable-row' data-href='{{$.BaseURI}}api/detail/{{.ID}}'><span class="badge badge-pill badge-success">up</span></td>
-                    {{end}} {{if eq 0 (index $.apisStatus .ID).Status }}
-                    <td class='clickable-row' data-href='{{$.BaseURI}}api/detail/{{.ID}}'><span class="badge badge-pill badge-default">?</span></td>
-                    {{end}} {{if eq -1 (index $.apisStatus .ID).Status }}
-                    <td class='clickable-row' data-href='{{$.BaseURI}}api/detail/{{.ID}}'><span class="badge badge-pill badge-danger">down</span></td>
+        <div class="col-md-12">
+            <table class="table table-responsive table-striped table-hover">
+                <thead>
+                    <tr class="row col-12">
+                        <th class="col-1">状态</th>
+                        <!-- <th class="col-md-2">接口地址</th> -->
+                        <th class="col-2">UPTIME</th>
+                        <th class="col-2">平均响应时间</th>
+                        <th class="col-3">监控名</th>
+                        <th class="col-4">管理</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {{range $i, $e := .apis}}
+                    <tr class="row col-12">
+                        {{if eq 1 (index $.apisStatus .ID).Status}}
+                            <td class='clickable-row col-1' data-href='{{$.BaseURI}}api/detail/{{.ID}}'><span class="badge badge-success">online</span></td>
+                        {{end}}
+                        {{if eq 0 (index $.apisStatus .ID).Status }}
+                            <td class='clickable-row col-1' data-href='{{$.BaseURI}}api/detail/{{.ID}}'><span class="badge badge-default">?</span></td>
+                        {{end}}
+                        {{if eq -1 (index $.apisStatus .ID).Status }}
+                            <td class='clickable-row col-1' data-href='{{$.BaseURI}}api/detail/{{.ID}}'><span class="badge badge-danger">offline</span></td>
+                        {{end}}
+
+                        <!-- <td class="text"><a href="{{.URL}}"><span>{{.URL}}</span></a></td> -->
+                        <td class='up-percentage col-2'>
+                            <a href='{{$.BaseURI}}api/detail/{{.ID}}'>{{TIMES ((index $.apisStatus .ID).UpPercentage) 100}}%</a>
+                        </td>
+                        <td class='average-response-time col-2'>
+                            <a href='{{$.BaseURI}}api/detail/{{.ID}}'>{{(index $.apisStatus .ID).AverageResponseTime}} 毫秒</a>
+                        </td>
+                        <td class="alias col-3">
+                            <i class="fa fa-lock" aria-hidden="true"></i>
+                            <a href='{{$.BaseURI}}api/detail/{{.ID}}'>
+                                 {{.Alias}}
+                            </a>
+                        </td>
+                        <td class='col-4'>
+                            {{if eq 0 .Start}}
+                                <a class="btn btn-outline-success" role="button" href="{{$.BaseURI}}monitor/start/{{.ID}}">
+                					<i class="fa fa-play" aria-hidden="true"></i> 开始监控
+                				</a>
+                            {{else}}
+                                <a class="btn btn-outline-warning" role="button" href="{{$.BaseURI}}monitor/pause/{{.ID}}">
+                					<i class="fa fa-pause" aria-hidden="true"></i> 暂停监控
+                				</a>
+                            {{end}}
+                            <button type="button" class="btn btn-outline-secondary" data-toggle="modal" data-target="#api-model" data-id="{{.ID}}" data-url="{{.URL}}" data-alias="{{.Alias}}" data-interval="{{.IntervalTime}}" data-alert="{{.AlertReceivers}}" data-timeout="{{.Timeout}}" data-failMax="{{.FailMax}}"
+                                data-title="编辑监控接口" data-action="update">
+        						<i class="fa fa-pencil" aria-hidden="true"></i> 编辑
+        					</button>
+                            <a class="btn btn-outline-danger" role="button" href="{{$.BaseURI}}api/delete/{{.ID}}">
+        						<i class="fa fa-trash-o" aria-hidden="true"></i> 删除
+        					</a>
+                        </td>
+                    </tr>
                     {{end}}
-                    <td class='clickable-row' data-href='{{$.BaseURI}}api/detail/{{.ID}}'>{{.Alias}}</td>
-                    <td class="text"><span>{{.URL}}</span></td>
-                    <td class='clickable-row' data-href='{{$.BaseURI}}api/detail/{{.ID}}'>{{TIMES ((index $.apisStatus .ID).UpPercentage) 100}}%</td>
-                    <td>{{(index $.apisStatus .ID).AverageResponseTime}} 毫秒</td>
-                    <td>
-                        {{if eq 0 .Start}}
-                        <a class="btn btn-outline-success" role="button" href="{{$.BaseURI}}monitor/start/{{.ID}}">
-        							<span class="glyphicon glyphicon-play" aria-hidden="true"></span> 开始监控
-        						</a> {{else}}
-                        <a class="btn btn-outline-warning" role="button" href="{{$.BaseURI}}monitor/pause/{{.ID}}">
-        							<span class="glyphicon glyphicon-pause" aria-hidden="true"></span> 暂停监控
-        						</a> {{end}}
-                        <button type="button" class="btn btn-outline-secondary" data-toggle="modal" data-target="#api-model" data-id="{{.ID}}" data-url="{{.URL}}" data-alias="{{.Alias}}" data-interval="{{.IntervalTime}}" data-alert="{{.AlertReceivers}}" data-timeout="{{.Timeout}}" data-failMax="{{.FailMax}}"
-                            data-title="编辑监控接口" data-action="update">
-    								<span class="glyphicon glyphicon-plus" aria-hidden="true"></span> 编辑
-    							</button>
-                        <a class="btn btn-outline-danger" role="button" href="{{$.BaseURI}}api/delete/{{.ID}}">
-    								<span class="glyphicon glyphicon-trash" aria-hidden="true"></span> 删除
-    							</a>
-                    </td>
-                </tr>
-                {{end}}
-            </tbody>
-        </table>
-        <p>
-            <button id="createAPIButton" type="button" class="btn btn-outline-primary" data-toggle="modal" data-action="create" data-title="增加监控接口" data-target="#api-model">
+                </tbody>
+            </table>
+            <p>
+                <button id="createAPIButton" type="button" class="btn btn-primary" data-toggle="modal" data-action="create" data-title="增加监控接口" data-target="#api-model">
                     <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> 增加监控接口
                 </button>
-        </p>
-    </div>
+            </p>
+        </div>
     {{end}}
     <div class="modal fade" id="api-model" tabindex="-1" role="dialog">
         <div class="modal-dialog modal-lg" role="document">

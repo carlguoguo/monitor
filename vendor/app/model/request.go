@@ -26,11 +26,9 @@ func RequestCreate(apiID string, status int, cost int, contentSize int) error {
 func RequestByAPIID(apiID string, limit int) ([]Request, error) {
 	var result []Request
 	var err error
+	query := "SELECT * FROM request WHERE api_id = ? order by request_time desc"
 	if limit > 0 {
-		err = database.SQL.Select(&result, "SELECT * FROM request WHERE api_id = ? order by request_time desc limit ?", apiID, limit)
-	} else {
-		err = database.SQL.Select(&result, "SELECT * FROM request WHERE api_id = ? order by request_time desc", apiID)
+		err = database.SQL.Select(&result, query+" limit ?", apiID, limit)
 	}
-
 	return result, standardizeError(err)
 }
