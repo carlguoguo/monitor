@@ -20,9 +20,9 @@ type API struct {
 	UpdatedAt      time.Time `db:"updated_at"`
 	AlertReceivers string    `db:"alert_receivers"`
 	Timeout        int       `db:"timeout"`
-	FailMax        uint8     `db:"fail_max"`
+	FailMax        int       `db:"fail_max"`
 	CreatedBy      uint32    `db:"user_id"`
-	IntervalTime   uint8     `db:"interval_time"`
+	IntervalTime   int       `db:"interval_time"`
 	Start          uint8     `db:"start"`
 	Job            interval.Job
 }

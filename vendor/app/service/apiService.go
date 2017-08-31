@@ -69,25 +69,22 @@ func requestGET(api model.API) func() {
 		}
 		resp, err := client.Head(api.URL)
 
-		if err != nil || resp.StatusCode != 200 {
+		if err != nil || resp == nil {
 			fmt.Println(err)
-			contentLength = -1
-			costTime = -1
-			if resp != nil {
-				defer resp.Body.Close()
-				statusCode = resp.StatusCode
-			} else {
-				statusCode = -1
-			}
+			statusCode = 0
+			contentLength = 0
 		} else {
-			defer resp.Body.Close()
 			statusCode = resp.StatusCode
 			contentLength = int(resp.ContentLength)
-			costTime = int(time.Since(timeStart) / time.Millisecond)
 		}
+		costTime = int(time.Since(timeStart) / time.Millisecond)
 		fmt.Printf("%s : %d\n", api.URL, statusCode)
 		apiID := fmt.Sprintf("%d", api.ID)
-		model.RequestCreate(apiID, statusCode, costTime, contentLength)
+		requestCreatedErr := model.RequestCreate(apiID, statusCode, costTime, contentLength)
+		if requestCreatedErr != nil {
+			fmt.Println(requestCreatedErr)
+			fmt.Println(costTime)
+		}
 
 		apiStatus, err := model.APIStatusByID(apiID)
 		if err != nil {
@@ -134,9 +131,24 @@ func requestGET(api model.API) func() {
 			}
 		}
 
+		serviceDown := false
 		if api.FailMax == 1 && statusCode != 200 && api.AlertReceivers != "" {
+			serviceDown = true
+		} else {
+			lastNRequests, _ := model.RequestByAPIID(apiID, api.FailMax)
+			for index, request := range lastNRequests {
+				if request.Status == 200 {
+					serviceDown = false
+					break
+				}
+				if index+1 == api.FailMax {
+					serviceDown = true
+				}
+			}
+		}
+		if serviceDown {
 			subject := "接口监控报警邮件"
-			body := fmt.Sprintf("%s 已经连续请求失败已达预设(%d次)上限，请尽快验证服务", api.URL, api.FailMax)
+			body := fmt.Sprintf("%s 在%d分钟内，连续请求失败已达预设(%d次)上限，请尽快验证服务", api.URL, (api.IntervalTime * api.FailMax), api.FailMax)
 			err = email.SendMail(api.AlertReceivers, subject, body)
 			if err != nil {
 				fmt.Println(err)
