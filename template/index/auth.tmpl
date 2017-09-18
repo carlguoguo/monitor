@@ -35,27 +35,27 @@
                         <td class='average-response-time col-2'>
                             <a href='{{$.BaseURI}}api/detail/{{.ID}}'>{{(index $.apisStatus .ID).AverageResponseTime}} 毫秒</a>
                         </td>
-                        <td class="alias col-3">
+                        <td class="alias col-4">
                             <i class="fa fa-lock" aria-hidden="true"></i>
                             <a href='{{$.BaseURI}}api/detail/{{.ID}}'>
                                  {{.Alias}}
                             </a>
                         </td>
-                        <td class='col-4'>
+                        <td class='col-3'>
                             {{if eq 0 .Start}}
-                                <a class="btn btn-outline-success" role="button" href="{{$.BaseURI}}monitor/start/{{.ID}}">
+                                <a class="btn btn-outline-success btn-sm" role="button" href="{{$.BaseURI}}monitor/start/{{.ID}}">
                 					<i class="fa fa-play" aria-hidden="true"></i> 开始监控
                 				</a>
                             {{else}}
-                                <a class="btn btn-outline-warning" role="button" href="{{$.BaseURI}}monitor/pause/{{.ID}}">
+                                <a class="btn btn-outline-warning btn-sm" role="button" href="{{$.BaseURI}}monitor/pause/{{.ID}}">
                 					<i class="fa fa-pause" aria-hidden="true"></i> 暂停监控
                 				</a>
                             {{end}}
-                            <button type="button" class="btn btn-outline-secondary" data-toggle="modal" data-target="#api-model" data-id="{{.ID}}" data-url="{{.URL}}" data-alias="{{.Alias}}" data-interval="{{.IntervalTime}}" data-alert="{{.AlertReceivers}}" data-timeout="{{.Timeout}}" data-failMax="{{.FailMax}}"
+                            <button type="button" class="btn btn-outline-secondary btn-sm" data-toggle="modal" data-target="#api-model" data-id="{{.ID}}" data-url="{{.URL}}" data-alias="{{.Alias}}" data-interval="{{.IntervalTime}}" data-alert="{{.AlertReceivers}}" data-timeout="{{.Timeout}}" data-failMax="{{.FailMax}}"
                                 data-title="编辑监控接口" data-action="update">
         						<i class="fa fa-pencil" aria-hidden="true"></i> 编辑
         					</button>
-                            <a class="btn btn-outline-danger" role="button" href="{{$.BaseURI}}api/delete/{{.ID}}">
+                            <a class="btn btn-outline-danger" role="button btn-sm" href="{{$.BaseURI}}api/delete/{{.ID}}">
         						<i class="fa fa-trash-o" aria-hidden="true"></i> 删除
         					</a>
                         </td>
